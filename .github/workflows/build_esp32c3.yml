@@ -2,21 +2,15 @@ name: ESP32 C3
 
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
 on:
-  push:
-  pull_request:
-    paths-ignore:
-      - "examples/**"
-      - "README.md"
-      - "ci/*unix*.sh"
-      - ".github/workflows/build_unix.yml"
+  workflow_dispatch:
 
 jobs:
   tensorflow_micropython_esp32_c3_build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Prepare to Build Tensorflow Micropython Firmware for ESP32
         run: |
           git submodule init
@@ -52,7 +46,7 @@ jobs:
           source ./micropython/tools/ci.sh && ci_esp32_idf44_setup
       - name: Cache tflm
         id: cache-tflm
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-tflm
         with:
@@ -65,7 +59,7 @@ jobs:
           source ./esp-idf/export.sh
 
           pip3 install Pillow
-          pip3 install Wave
+          # pip3 install Wave
 
           echo "Regenerating microlite/tfm directory"
           rm -rf ./micropython-modules/microlite/tflm
@@ -81,27 +75,27 @@ jobs:
           echo "make -C mpy-cross V=1 clean all"
           make -C mpy-cross V=1 clean all
 
-      - name: Build ESP32-MICROLITE_C3
-        run: |
+      # - name: Build ESP32-MICROLITE_C3
+      #   run: |
 
-          source ./esp-idf/export.sh
+      #     source ./esp-idf/export.sh
 
-          echo "cd ./boards/esp32/MICROLITE_C3"
-          cd ./boards/esp32/MICROLITE_C3
+      #     echo "cd ./boards/esp32/MICROLITE_C3"
+      #     cd ./boards/esp32/MICROLITE_C3
 
-          echo "Building ESP32-MICROLITE_C3"
-          rm -rf builds
-          idf.py clean build
+      #     echo "Building ESP32-MICROLITE_C3"
+      #     rm -rf builds
+      #     idf.py clean build
 
-          ../../../micropython-modules/microlite/assemble-unified-image-esp.sh \
-          ../../../micropython/ports/esp32
+      #     ../../../micropython-modules/microlite/assemble-unified-image-esp.sh \
+      #     ../../../micropython/ports/esp32
 
-      - name: Archive ESP32-MICROLITE_C3 firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: microlite-esp32c3-firmware
-          path: |
-            boards/esp32/MICROLITE_C3/build/firmware.bin
+      # - name: Archive ESP32-MICROLITE_C3 firmware
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: microlite-esp32c3-firmware
+      #     path: |
+      #       boards/esp32/MICROLITE_C3/build/firmware.bin
 
       - name: Build ESP32-MICROLITE_C3_USB
         run: |

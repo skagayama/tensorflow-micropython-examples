@@ -10,6 +10,7 @@ on:
       - 'ci/*unix*.sh'
       - '.github/workflows/build_unix.yml'
       - '.github/workflows/build_esp32.yml'
+      - ".github/workflows/build_esp32c3.yml"
   pull_request:
     paths-ignore:
       - 'examples/**'
