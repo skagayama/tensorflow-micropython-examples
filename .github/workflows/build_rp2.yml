@@ -3,14 +3,6 @@ name: RP2
 
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
 on:
-  push:
-    paths-ignore:
-      - 'examples/**'
-      - 'README.md'
-      - 'ci/*unix*.sh'
-      - '.github/workflows/build_unix.yml'
-      - '.github/workflows/build_esp32.yml'
-      - ".github/workflows/build_esp32c3.yml"
   pull_request:
     paths-ignore:
       - 'examples/**'
